@@ -1,0 +1,9 @@
+services:
+  panoramic-features:
+    build: .
+    image: panoramic-features:latest
+    user: "${UID:-10001}:${GID:-10001}"
+    volumes:
+      - ${DATA_DIR:-./data}:/data:ro
+      - ${OUTPUT_DIR:-./output}:/output
+    command: ["/data", "-o", "/output/FeatureList.xlsx"]
