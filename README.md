@@ -176,9 +176,12 @@ Annotations are XML files with polygons under `outputs/object/item`; each item c
 | Label | Meaning |
 |---|---|
 | `48` | Right lower third molar (appears on the image's left) |
-| `Sağ M3` | Mandibular canal beside the right third molar |
+| `right canal` | Mandibular canal beside the right third molar |
 | `38` | Left lower third molar |
-| `Sol M3` | Mandibular canal beside the left third molar |
+| `left canal` | Mandibular canal beside the left third molar |
+
+Labels are case-insensitive; `right canal` may also be written `right_canal` or `right M3` (likewise
+for the left side), and the older Turkish names `Sağ M3` / `Sol M3` are still read.
 
 Labels may be missing: a tooth without a canal still gets its root features, and a canal
 without a tooth still gets its canal features. A label with several polygons is treated as the
@@ -311,7 +314,7 @@ Python 3.10–3.13 and builds the Docker image.
 |---|---|
 | `No image/annotation pairs found` | Images and XML files must share their file name stem (`12.jpg` + `12.xml`) and sit in the same folder |
 | `WARNING No annotation for 12.jpg` | There is no `12.xml` next to it; the image is skipped |
-| A whole tooth row is empty | Its polygon is missing or lies outside the image. Check the label: `48`, `38`, `Sağ M3` or `Sol M3`, exactly |
+| A whole tooth row is empty | Its polygon is missing or lies outside the image. Check the label: `48`, `38`, `right canal` or `left canal` |
 | Only one column is empty | That feature failed; run with `-v` to see the traceback and the image it came from |
 | `CanalDeviation` / `NarrowingCanal` empty | The canal polygon is too short for a centreline (under about 30 pixels long) |
 | `Deflection` empty on a tooth | Fewer than 40 pixels in a root, or the roots could not be told apart. Check the polygon covers the roots |

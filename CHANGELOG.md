@@ -7,6 +7,7 @@ Notable changes to this project. The format follows
 ## [Unreleased]
 
 ### Added
+- Canal labels `right canal` / `left canal` (the Turkish `Sağ M3` / `Sol M3` remain accepted).
 - Docker image (multi-stage, non-root), `docker-compose.yml` and `Makefile` shortcuts.
 - CI builds and smoke-tests the image and runs on every branch push.
 - `scripts/make_dummy_dataset.py` for generating synthetic annotated radiographs and
