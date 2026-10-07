@@ -17,7 +17,7 @@ def dataset(tmp_path, rng):
     for name in ("2", "10"):
         image = rng.integers(60, 250, SHAPE).astype(np.uint8)
         cv2.imwrite(str(tmp_path / f"{name}.jpg"), image)
-        write_xml(tmp_path / f"{name}.xml", {"48": TOOTH, "Sağ M3": CANAL})
+        write_xml(tmp_path / f"{name}.xml", {"48": TOOTH, "right canal": CANAL})
     cv2.imwrite(str(tmp_path / "orphan.jpg"), np.zeros(SHAPE, np.uint8))
     return tmp_path
 
