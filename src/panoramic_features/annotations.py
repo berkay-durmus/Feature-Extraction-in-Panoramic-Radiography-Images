@@ -8,12 +8,29 @@ from pathlib import Path
 
 Polygon = list[tuple[int, int]]
 
-RIGHT_TOOTH, RIGHT_CANAL = "48", "Sağ M3"
-LEFT_TOOTH, LEFT_CANAL = "38", "Sol M3"
+RIGHT_TOOTH, RIGHT_CANAL = "48", "right canal"
+LEFT_TOOTH, LEFT_CANAL = "38", "left canal"
+
+# Accepted spellings (case-insensitive) mapped to the canonical labels above.
+ALIASES = {
+    "right canal": RIGHT_CANAL,
+    "right_canal": RIGHT_CANAL,
+    "right m3": RIGHT_CANAL,
+    "sağ m3": RIGHT_CANAL,
+    "left canal": LEFT_CANAL,
+    "left_canal": LEFT_CANAL,
+    "left m3": LEFT_CANAL,
+    "sol m3": LEFT_CANAL,
+}
+
+
+def canonical_label(name: str) -> str:
+    name = name.strip()
+    return ALIASES.get(name.casefold(), name)
 
 
 def parse_annotation(path: str | Path) -> dict[str, list[Polygon]]:
-    """Return ``{label: [polygon, ...]}``; a polygon is a list of ``(x, y)`` pixel points."""
+    """Return ``{label: [polygon, ...]}`` with canonical labels; a polygon is ``[(x, y), ...]``."""
     root = ET.parse(path).getroot()
     polygons: dict[str, list[Polygon]] = defaultdict(list)
 
@@ -33,6 +50,6 @@ def parse_annotation(path: str | Path) -> dict[str, list[Polygon]]:
             index += 1
 
         if len(points) >= 3:
-            polygons[label.strip()].append(points)
+            polygons[canonical_label(label)].append(points)
 
     return dict(polygons)
