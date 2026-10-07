@@ -45,7 +45,7 @@ def canal_outline(x0: int, x1: int, y: int, width: int, wave: float) -> np.ndarr
 
 def render(rng: np.random.Generator) -> tuple[np.ndarray, dict[str, np.ndarray]]:
     teeth, canals = {}, {}
-    for tooth, canal, cx, mirror in (("48", "Sağ M3", 260, 1), ("38", "Sol M3", 940, -1)):
+    for tooth, canal, cx, mirror in (("48", "right canal", 260, 1), ("38", "left canal", 940, -1)):
         bends = [int(rng.integers(-25, 6)), int(rng.integers(-5, 26))]
         outline = tooth_outline(*bends)
         outline[:, 0] *= mirror

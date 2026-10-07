@@ -22,8 +22,8 @@ from panoramic_features.annotations import parse_annotation  # noqa: E402
 from panoramic_features.imaging import load_gray  # noqa: E402
 from panoramic_features.pipeline import FEATURES, extract_features  # noqa: E402
 
-COLORS = {"48": "#e4572e", "Sağ M3": "#17bebb", "38": "#f3a712", "Sol M3": "#76b041"}
-PAIRS = (("48", "Sağ M3"), ("38", "Sol M3"))
+COLORS = {"48": "#e4572e", "right canal": "#17bebb", "38": "#f3a712", "left canal": "#76b041"}
+PAIRS = (("48", "right canal"), ("38", "left canal"))
 MARGIN = 70
 
 
@@ -34,8 +34,8 @@ def draw(ax, polygons, labels, bounds=None, fontsize=11):
             ax.add_patch(plt.Polygon(pts, fill=False, ec=COLORS[label], lw=1.8))
             if bounds is None:
                 x, y = pts[:, 0].mean(), pts[:, 1].min() - 25
-                ax.text(x, y, label, color=COLORS[label], ha="center", fontsize=fontsize,
-                        weight="bold")  # fmt: skip
+                ax.text(x, y, label.capitalize(), color=COLORS[label], ha="center",
+                        fontsize=fontsize, weight="bold")  # fmt: skip
 
 
 def crop_bounds(polygons, labels, shape):
