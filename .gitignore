@@ -168,3 +168,4 @@ cython_debug/
 # Outputs
 *.xlsx
 *.csv
+demo-data/
