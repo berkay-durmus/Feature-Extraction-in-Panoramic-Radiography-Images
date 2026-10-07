@@ -3,7 +3,7 @@ from __future__ import annotations
 import cv2
 import numpy as np
 
-from panoramic_features.geometry import crop_to_mask, mask_points, orient_tooth, principal_axis
+from panoramic_features.geometry import crop_to_mask, mask_points, orient_tooth
 
 MIN_ROOT_PIXELS = 40
 MIN_ROOT_AREA_RATIO = 0.15  # a component smaller than this fraction of the largest is noise
@@ -42,21 +42,22 @@ def _split_roots(tooth: np.ndarray, side: str) -> list[np.ndarray]:
     return [crop_to_mask(p) for p in parts if p.sum() >= MIN_ROOT_PIXELS]
 
 
-def _tilt(points: np.ndarray) -> float:
-    """Signed angle (degrees) of the dominant axis from the vertical."""
-    _, (dx, dy) = principal_axis(points)
-    if dy < 0:
-        dx, dy = -dx, -dy
-    return float(np.degrees(np.arctan2(dx, dy)))
-
-
 def _bend(root: np.ndarray) -> float:
+    """Angle (degrees) between the coronal-to-middle and middle-to-apical direction of a root."""
     points = mask_points(root)
-    split = np.median(points[:, 1])
-    upper, lower = points[points[:, 1] <= split], points[points[:, 1] > split]
-    if min(len(upper), len(lower)) < MIN_ROOT_PIXELS // 2:
+    rows = np.quantile(points[:, 1], [1 / 3, 2 / 3])
+    thirds = [
+        points[points[:, 1] <= rows[0]],
+        points[(points[:, 1] > rows[0]) & (points[:, 1] <= rows[1])],
+        points[points[:, 1] > rows[1]],
+    ]
+    if min(len(t) for t in thirds) < MIN_ROOT_PIXELS // 3:
         return float("nan")
-    return abs(_tilt(lower) - _tilt(upper))
+
+    first, middle, last = (t.mean(axis=0) for t in thirds)
+    a, b = middle - first, last - middle
+    norm = np.linalg.norm(a) * np.linalg.norm(b)
+    return float(np.degrees(np.arccos(np.clip(a @ b / norm, -1, 1)))) if norm else float("nan")
 
 
 def _max_width_drop(root: np.ndarray) -> float:

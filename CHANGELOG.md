@@ -11,7 +11,7 @@ Notable changes to this project. The format follows
 - CI builds and smoke-tests the image and runs on every branch push.
 - `scripts/make_dummy_dataset.py` for generating synthetic annotated radiographs and
   `scripts/make_figure.py` for the README figure.
-- Detailed README, this changelog, `CONTRIBUTING.md`.
+- Detailed README with a worked example, this changelog, `CONTRIBUTING.md`.
 
 ## [1.0.0]
 
@@ -26,7 +26,7 @@ Restructured into an installable package; the original scripts are replaced.
   name, and unmatched files are reported.
 - Annotation items are read one by one instead of aligning two separate tag lists.
 - Missing values are empty cells (or `--missing`) instead of `-1`.
-- Root deflection is the bend angle between the coronal and apical half of a root; root
+- Root deflection is the bend angle between a root's coronal-to-middle and middle-to-apical direction; root
   narrowing is the largest relative width loss along a root (continuous, previously 0/1).
 - Canal deviation is the standard deviation of the centreline direction in degrees, with
   ends trimmed proportionally instead of a fixed 50/100 points.

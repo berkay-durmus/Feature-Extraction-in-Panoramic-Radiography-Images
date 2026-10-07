@@ -138,7 +138,11 @@ panoramic-features demo-data -o demo.csv
 ```
 
 The images are drawn shapes, not anatomy — they exist to exercise the pipeline and to show
-what the output looks like. The figure at the top of this page was made from such a sample.
+what the output looks like. To render the overview figure for your own radiograph:
+
+```bash
+python scripts/make_figure.py 14.jpg 14.xml -o overview.png    # needs pip install -e ".[dev]"
+```
 
 ---
 
@@ -187,7 +191,7 @@ union of them.
 | Column | Meaning |
 |---|---|
 | `Obscuration` | Contrast `(R − m) / (R + m)` between the tooth/canal overlap (mean intensity `m`) and the reference tooth density `R`, the middle multi-Otsu threshold of the rest of the tooth. Positive when the overlap is darker |
-| `Deflection` | Largest bend angle, in degrees, between the coronal and the apical half of a root, after the tooth is oriented with its roots pointing down |
+| `Deflection` | Largest bend angle, in degrees, of a root: the angle between its coronal-to-middle and middle-to-apical direction (0 = straight), after the tooth is oriented with its roots pointing down |
 | `NarrowingRoots` | Largest relative loss of width over 10% of a root's length. 0 means no narrowing, 1 means the root is pinched off |
 | `NarrowingCanal` | `1 − w_low / w_high`: how much narrower the canal gets, comparing the 5th and 95th percentile of its width along the centreline |
 | `DiscontinuityCanal` | Fraction of the canal outline that lies inside the tooth polygon |
@@ -199,7 +203,7 @@ distinguishable roots — is left empty (or set with `--missing`). The table has
 
 The thresholds behind these definitions are constants at the top of the modules in
 `src/panoramic_features/features/`. They were chosen to behave sensibly on synthetic shapes and
-have **not been tuned or validated on clinical data**; check the intermediate results on a few
+checked on a single real radiograph; they have **not been tuned or validated on clinical data**; check the intermediate results on a few
 real cases before relying on the numbers.
 
 ---
@@ -279,10 +283,10 @@ FeatureList.xlsx      sheet "Features"; one row per tooth, two rows per image
 
 | ImageNumber | Tooth | Obscuration | Deflection | NarrowingRoots | NarrowingCanal | DiscontinuityCanal | CanalDeviation |
 |---|---|---|---|---|---|---|---|
-| 1 | 48 | 0.149 | 16.775 | 0.194 | 0.067 | 0.160 | 8.573 |
-| 1 | 38 | 0.255 | 14.291 | 0.175 | 0.080 | 0.136 | 9.064 |
+| 14 | 48 | 0.234 | 0.132 | 0.194 | 0.395 | 0.050 | 9.418 |
+| 14 | 38 | 0.110 | 23.706 | 0.144 | 0.470 | 0.147 | 6.439 |
 
-(Values from a synthetic sample.)
+(The two rows for the radiograph shown at the top of this page.)
 
 ---
 
@@ -340,5 +344,6 @@ Released under the [MIT License](LICENSE). Copyright 2024 Berkay Ahmet Durmuş.
 
 ---
 
-The figure in this README was rendered from a synthetic sample made by
-`scripts/make_dummy_dataset.py` (`scripts/make_figure.py`), so no patient data appears in it.
+The radiograph in the figure is one annotated image from the author's thesis dataset; it
+carries no identifying text. Do not commit raw patient data to this repository. The synthetic
+generator in `scripts/make_dummy_dataset.py` is there so that examples and tests don't need any.
