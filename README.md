@@ -40,6 +40,24 @@ from panoramic_features.pipeline import extract_features
 rows = extract_features("12.jpg", "12.xml")  # [Row(image_id, tooth, values), ...]
 ```
 
+## Docker
+
+```bash
+docker build -t panoramic-features .
+
+mkdir -p output
+docker run --rm --user "$(id -u):$(id -g)" \
+  -v "$PWD/data:/data:ro" -v "$PWD/output:/output" \
+  panoramic-features
+```
+
+The container reads images and XML files from `/data` and writes `/output/FeatureList.xlsx`.
+Any CLI option can be appended, e.g. `panoramic-features /data -o /output/features.csv --missing -1 -v`.
+With Compose: `DATA_DIR=./data docker compose run --rm panoramic-features`. `make docker-build`
+and `make docker-run` wrap the same commands.
+
+The image is multi-stage, based on `python:3.12-slim`, and runs as a non-root user.
+
 ## Annotation format
 
 XML with polygons under `outputs/object/item`, each item having a `name` and a `polygon` with
